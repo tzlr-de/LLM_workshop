@@ -72,6 +72,7 @@ def setup_index(document_path: str,
         logger.info(f"Loading existing index from {persist_path}...")
         context = core.StorageContext.from_defaults(persist_dir=persist_path)
         index_store = core.load_index_from_storage(context)
+
     else:
         logger.info(f"Creating new index for documents in {document_path}...")
         reader = core.SimpleDirectoryReader(document_path)
@@ -104,6 +105,7 @@ def start_chat(query_engine: RetrieverQueryEngine, query: str = None):
         while True:
             print("=" * 50)
 
+            # Get user input or use the provided query
             if query is not None:
                 print(f"Running single query: {query}")
                 single_run = True
@@ -117,7 +119,10 @@ def start_chat(query_engine: RetrieverQueryEngine, query: str = None):
                     logger.info("Exiting...")
                     break
 
+            # Run the query
             response = query_engine.query(query)
+
+            # Display the response and source nodes
             print("=" * 50)
             print("= Response =")
             print(response.response)
@@ -130,6 +135,7 @@ def start_chat(query_engine: RetrieverQueryEngine, query: str = None):
 
             print("= Used files =")
             print(tabulate(rows, headers=["#", "File Name", "Start", "End", "Score"], tablefmt="fancy_grid"))
+
             if single_run:
                 break
             query = None
