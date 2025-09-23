@@ -1,0 +1,3 @@
+patterns:
+  - ["(\\n+## Pfadnavigation\\n[\\W\\w]+\\n)# ", "\n# "]
+  - ["(\\n(\\n| +\\n)+)", "\\n\\n"]
