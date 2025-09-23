@@ -159,7 +159,6 @@ def main(args):
     query_engine = setup_query_engine(index, **query_engine_params)
 
 
-
     start_chat(query_engine, query=args.query)
 
 if __name__ == "__main__":
@@ -178,6 +177,7 @@ if __name__ == "__main__":
 
 """
 Testing queries:
-- Ich würde gerne Bafög beantragen. Welche Unterlagen brauche ich dafür, wer ist die Ansprechperson und was sind deren Kontaktdaten?
-
+- Ich würde gerne Bafög beantragen. Welche Unterlagen brauche ich dafür und wer ist die Ansprechperson für Bafög. Mein Nachname ist Lorsch
+- was muss ich beachten, wenn ich einen Brunnen bohren will und welche Unterlagen muss ich dafür einreichen?
+- Ich will eine Garage bauen. Bei wem muss ich die Baugenehmigung einreichen und wie lautet die telefonnummer
 """

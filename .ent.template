@@ -1,0 +1,15 @@
+
+OLLAMA_MODELS_PATH=/<change_me>/ollama/.ollama/models
+OLLAMA_MODELS=/root/.ollama/models
+OLLAMA_PORT=11435
+OLLAMA_HOST=0.0.0.0
+OLLAMA_KEEP_ALIVE=5m0s
+OLLAMA_NUM_PARALLEL=1
+
+OPEN_WEBUI_PORT=8080
+OPEN_WEBUI_DATA=/<change_me>/open-webui
+
+N8N_PORT=5678
+N8N_DATA=/<change_me>/n8n
+N8N_LOCAL_FILES=./n8n-local-files
+N8N_SECURE_COOKIE=false
