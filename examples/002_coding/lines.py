@@ -1,7 +1,8 @@
+#!/usr/bin/env python
+import  argparse
+
 import cv2
 import numpy as np
-
-import  argparse
 
 def detect_lines(image_path, output_path):
 
@@ -15,7 +16,6 @@ def detect_lines(image_path, output_path):
 
     # Find the lines in the edge map using Hough transform
     lines = cv2.HoughLinesP(edged, 1, np.pi/180, 100, minLineLength=10, maxLineGap=20)
-    print(lines.shape)
 
     # Draw the detected lines on a separate image
     vis_lines = image.copy()
