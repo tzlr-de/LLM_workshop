@@ -167,6 +167,7 @@ def main(args):
 
     start_chat(query_engine, query=args.query)
 
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()

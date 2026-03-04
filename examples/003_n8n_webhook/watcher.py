@@ -24,6 +24,7 @@ class n8nHandler(FileSystemEventHandler):
         print(f"{ftype} modified: {event.src_path}")
 
     def _send_request(self, path):
+        print(f"Sending \"{path}\" to {self._url}")
         response = requests.request(
             method=self._method,
             url=self._url,
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="n8n Webhook Example")
 
-    parser.add_argument("--host", type=str, default="http://192.168.1.45")
+    parser.add_argument("--host", type=str, default="http://localhost")
     parser.add_argument("--port", type=int, default=5678)
     parser.add_argument("--hook_uuid", "-uuid", type=str,
                         default="caa9b92e-e9ee-466a-a2cc-85d1fb6a2a8a",
