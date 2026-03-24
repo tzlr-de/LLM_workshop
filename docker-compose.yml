@@ -47,7 +47,7 @@ services:
 
   n8n:
     container_name: n8n
-    image: docker.n8n.io/n8nio/n8n
+    image: n8nio/n8n:latest
     ports:
       - "${N8N_PORT:-5678}:5678"
     volumes:
@@ -58,5 +58,20 @@ services:
     environment:
       - N8N_PORT=${N8N_PORT:-5678}
       - N8N_SECURE_COOKIE=${N8N_SECURE_COOKIE:-true}
+      - N8N_RUNNERS_ENABLED=true
+      - N8N_RUNNERS_MODE=external
+      - N8N_RUNNERS_BROKER_LISTEN_ADDRESS=0.0.0.0
+      - N8N_RUNNERS_AUTH_TOKEN=pBcCmghUGcT
+      - N8N_NATIVE_PYTHON_RUNNER=true
 
     restart: unless-stopped
+
+  n8n-task-runners:
+    image: n8nio/runners:latest
+    container_name: n8n-runners
+    environment:
+      - N8N_RUNNERS_TASK_BROKER_URI=http://n8n:5679
+      - N8N_RUNNERS_AUTH_TOKEN=pBcCmghUGcIT
+      # etc.
+    depends_on:
+      - n8n
