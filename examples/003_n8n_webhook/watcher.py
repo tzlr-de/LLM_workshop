@@ -1,8 +1,9 @@
-#! /usr/bin/env python3
+#! /usr/bin/env python
 
 import requests
 import time
 
+from pathlib import Path
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
@@ -17,14 +18,20 @@ class n8nHandler(FileSystemEventHandler):
         ftype = "Directory" if event.is_directory else "File"
         print(f"{ftype} created: {event.src_path}")
         if not event.is_directory:
-            self._send_request(event.src_path)
+            self._send_request(Path(event.src_path).resolve())
 
     def on_modified(self, event):
         ftype = "Directory" if event.is_directory else "File"
         print(f"{ftype} modified: {event.src_path}")
 
-    def _send_request(self, path):
+    def _send_request(self, path: Path):
         print(f"Sending \"{path}\" to {self._url}")
+        time.sleep(1)  # Wait for the file to be fully written
+
+        if not path.is_file():
+            print(f"ERROR: {path} is not a file.")
+            return
+        
         response = requests.request(
             method=self._method,
             url=self._url,
@@ -55,22 +62,27 @@ def main(args):
     observer = Observer()
 
     handler = n8nHandler(url=url, method=args.method)
-    observer.schedule(handler, path=args.path, recursive=False)
+    print(f"Watching {args.path.resolve()} for changes...")
+    print(f"Webhook URL: {url}")
+    observer.schedule(handler, path=str(args.path), recursive=False)
+
 
     observer.start()
     try:
         while True:
             time.sleep(1)
     except KeyboardInterrupt:
+        print("Stopping observer...")
         observer.stop()
     observer.join()
+    print("Observer stopped.")
 
 
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser(description="n8n Webhook Example")
 
-    parser.add_argument("--host", type=str, default="http://localhost")
+    parser.add_argument("--host", type=str, default="http://192.168.1.45")
     parser.add_argument("--port", type=int, default=5678)
     parser.add_argument("--hook_uuid", "-uuid", type=str,
                         default="caa9b92e-e9ee-466a-a2cc-85d1fb6a2a8a",
@@ -80,6 +92,6 @@ if __name__ == "__main__":
     parser.add_argument("--method", "-m", type=str, default="POST", choices=["GET", "POST", "PUT", "DELETE"])
     parser.add_argument("--is_test", "-test", action="store_true", help="Run in test mode")
 
-    parser.add_argument("--path", "-p", type=str, default="folder", help="Path to the document directory")
+    parser.add_argument("--path", "-p", type=Path, default=Path("folder"), help="Path to the document directory")
 
     main(parser.parse_args())
